@@ -1,10 +1,17 @@
-//Select one db to work with:
+const Promise = require("bluebird");
+const mongoose = Promise.promisifyAll(require("mongoose"));
+const mongoDb = require("../../db/mongodb");
+const Schema = mongoose.Schema;
 
-//For SQL
-const sqlDb = require('../../db/sql');
-//For Mongo
-const mongoDb = require('../../db/mongodb')
+// instantiate movieSchema
+const movieSchema = new Schema({
+  title: String,
+  genres: Array,
+  runtime: Number,
+  popularity: Number,
+  vote_average: Number,
+});
 
-module.exports = {
-
-}
+// instantiate Movie model
+// export
+module.exports = mongoose.model("Movie", movieSchema);
