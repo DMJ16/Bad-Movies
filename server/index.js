@@ -55,7 +55,7 @@ app.get("/search", function (req, res) {
   // do NOT save the results into the database; render results directly on the page
 });
 
-app.post("/movies", (req, res) => {
+app.post("/save", (req, res) => {
   const movie = new Movie(req.body);
   return movie
     .save()
@@ -65,15 +65,20 @@ app.post("/movies", (req, res) => {
 
 app.post("/delete", function (req, res) {
   //remove movie from favorites into the database
-  return Movie.findOneAndDelete({ title: req.title })
+  return Movie.findOneAndDelete(req.body)
     .then((data) => res.status(200).send(data))
-    .catch((err) => console.error(err));
+    .catch((err) => {
+      console.log(err);
+      console.error(err);
+    });
 });
 
 app.get("/movies", (req, res) => {
   return Movie.find()
     .then((data) => res.status(200).send(data))
-    .catch((err) => console.error(err));
+    .catch((err) => {
+      console.error(err);
+    });
 });
 
 app.listen(1128, function () {
