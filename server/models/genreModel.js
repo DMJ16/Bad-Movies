@@ -4,7 +4,8 @@ const mongoDb = require("../../db/mongodb");
 const Schema = mongoose.Schema;
 
 const genreSchema = new Schema({
-  genre: String,
+  name: String,
+  id: Number,
 });
 
 // instantiate Genre model
