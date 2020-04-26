@@ -1,21 +1,15 @@
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
-const request = require("request"); // why have request?
-const Promise = require("bluebird");
-const mongoose = Promise.promisifyAll(require("mongoose"));
-const axios = require("axios").default;
-const { API_KEY } = require("../config.js");
+// const request = require("request"); // why have request?
+// const axios = require("axios").default;
+// const { API_KEY } = require("../config.js");
 
 //MODELS
-const Movie = require("./models/movieModel.js");
-const Genre = require("./models/genreModel.js");
-
-// Sign up and get your moviedb API key here:
-// https://www.themoviedb.org/account/signup
-
+// const Movie = require("./models/movieModel.js");
+// const Genre = require("./models/genreModel.js");
 //Helpers
-const apiHelpers = require("./helpers/apiHelpers.js");
+// const apiHelpers = require("./helpers/apiHelpers.js");
 
 //Middleware
 app.use(bodyParser.json());
@@ -24,6 +18,16 @@ app.use(bodyParser.json());
 // it doesn't make a get request to '/',
 // it simply serves up the dist folder
 app.use(express.static(__dirname + "/../client/dist"));
+
+//ROUTES
+// import routes
+const movieRoutes = require("./routes/movieRoutes.js");
+// use middleware
+app.use("/movies", movieRoutes);
+
+app.listen(1128, function () {
+  console.log("listening on port 1128!");
+});
 
 /*
 Use the routes below to build your application:
@@ -37,56 +41,53 @@ Use the routes below to build your application:
 
 */
 
+// / const Promise = require("bluebird");
+// const mongoose = Promise.promisifyAll(require("mongoose"));
 //Routes
 //***********************************************************************************************************************
 //OPTION 1: Use regular routes;
 //If you are using OPTION 1, you do not need routes>movieRoutes.js file
 
-app.get("/genres", (req, res) => {
-  // make an axios request to get the official list of genres from themoviedb
-  // use this endpoint. you will need your API key from signup: https://api.themoviedb.org/3/genre/movie/list
-  return axios
-    .get(apiHelpers.genreListPath)
-    .then((res) => apiHelpers.saveGenres(res))
-    .then((genres) => res.status(200).send(genres))
-    .catch((err) => console.error(err));
-});
+// app.get("/genres", (req, res) => {
+//   // make an axios request to get the official list of genres from themoviedb
+//   // use this endpoint. you will need your API key from signup: https://api.themoviedb.org/3/genre/movie/list
+//   return axios
+//     .get(apiHelpers.genreListPath)
+//     .then((res) => apiHelpers.saveGenres(res))
+//     .then((genres) => res.status(200).send(genres))
+//     .catch((err) => console.error(err));
+// });
 
-app.get("/search", function (req, res) {
-  // use this endpoint to search for movies by genres (using API key): https://api.themoviedb.org/3/discover/movie
-  // and sort them by votes (worst first) using the search parameters in themoviedb API
-  // do NOT save the results into the database; render results directly on the page
-  return (
-    axios
-      .get(apiHelpers.searchByGenre(878))
-      .then((data) => console.log(data.data.total_results))
-      // res.status(200).send(genres)
-      .catch((err) => console.error(err))
-  );
-});
+// app.get("/search", function (req, res) {
+//   // use this endpoint to search for movies by genres (using API key): https://api.themoviedb.org/3/discover/movie
+//   // and sort them by votes (worst first) using the search parameters in themoviedb API
+//   // do NOT save the results into the database; render results directly on the page
+//   return (
+//     axios
+//       .get(apiHelpers.searchByGenre(878))
+//       .then((data) => console.log(data.data.total_results))
+//       // res.status(200).send(genres)
+//       .catch((err) => console.error(err))
+//   );
+// });
 
-app.post("/save", (req, res) => {
-  const movie = new Movie(req.body);
-  return movie
-    .save()
-    .then((data) => res.status(201).send(data))
-    .catch((err) => console.error(err));
-});
+// app.post("/save", (req, res) => {
+//   const movie = new Movie(req.body);
+//   return movie
+//     .save()
+//     .then((data) => res.status(201).send(data))
+//     .catch((err) => console.error(err));
+// });
 
-app.post("/delete", function (req, res) {
-  //remove movie from favorites into the database
-  return Movie.findOneAndDelete(req.body)
-    .then((data) => res.status(200).send(data))
-    .catch((err) => {
-      console.log(err);
-      console.error(err);
-    });
-});
-
-app.listen(1128, function () {
-  console.log("listening on port 1128!");
-});
-
+// app.post("/delete", function (req, res) {
+//   //remove movie from favorites into the database
+//   return Movie.findOneAndDelete(req.body)
+//     .then((data) => res.status(200).send(data))
+//     .catch((err) => {
+//       console.log(err);
+//       console.error(err);
+//     });
+// });
 // app.get("/movies", (req, res) => {
 //   return Movie.find()
 //     .then((data) => res.status(200).send(data))
