@@ -1,37 +1,45 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-class Search extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      genres: []
+const Search = ({ swapFavorites, showFaves }) => {
+  const [genres, setGenres] = useState([]);
+
+  // make an axios request in this component
+  //get the list of genres from your endpoint GET GENRES
+  useEffect(() => {
+    const fetch = async () => {
+      const result = await axios("/movies/genres");
+      setGenres(result.data);
     };
-  }
-  getGenres() {
-    //make an axios request in this component to get the list of genres from your endpoint GET GENRES
-  }
+    fetch();
+  }, []);
 
-  render() {
-    return (
-      <div className="search">
-        <button onClick={() => {this.props.swapFavorites()}}>{this.props.showFaves ? "Show Results" : "Show Favorites"}</button>
-        <br/><br/>
+  return (
+    <div className="search">
+      <button
+        onClick={() => {
+          swapFavorites();
+        }}
+      >
+        {showFaves ? "Show Results" : "Show Favorites"}
+      </button>
+      <br />
+      <br />
 
-        {/* Make the select options dynamic from genres !!! */}
-        {/* How can you tell which option has been selected from here? */}
+      {/* Make the select options dynamic from genres !!! */}
+      {/* How can you tell which option has been selected from here? */}
 
-        <select>
-          <option value="theway">The Way</option>
-          <option value="thisway">This Way</option>
-          <option value="thatway">That Way</option>
-        </select>
-        <br/><br/>
+      <select>
+        {genres.map((genre) => {
+          return <option key={genre.name}>{genre.name}</option>;
+        })}
+      </select>
+      <br />
+      <br />
 
-        <button>Search</button>
-
-      </div>
-    );
-  }
-}
+      <button>Search</button>
+    </div>
+  );
+};
 
 export default Search;

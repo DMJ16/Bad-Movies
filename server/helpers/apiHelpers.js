@@ -20,8 +20,8 @@ module.exports = {
     return Promise.all(genres);
   },
   genreListPath: `https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}&language=en-US`,
-  // searchPath: (i) =>
-  //   `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=vote_average.asc&include_adult=false&include_video=false&page=1&with_genres=${i}`,
+  searchPath: (i) =>
+    `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=vote_average.asc&include_adult=false&include_video=false&page=1&with_genres=${i}`,
 };
 
 // FOR REFERENCE:

@@ -12,8 +12,8 @@ module.exports = {
     // https://api.themoviedb.org/3/discover/movie
     // and sort them by horrible votes using the search parameters in the API
     return axios
-      .get(apiHelpers.searchPath(req.i, req.j))
-      .then((data) => res.status(200))
+      .get(apiHelpers.searchPath(req.id))
+      .then((data) => res.status(200).send(data))
       .catch((err) => console.error(err));
   },
   getGenres: (req, res) => {
@@ -38,7 +38,7 @@ module.exports = {
     return Movie.findOneAndDelete({ title: req.body.title })
       .then((data) => res.status(200).send(data))
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       });
   },
 };

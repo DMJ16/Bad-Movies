@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import axios from "axios";
 
@@ -7,59 +7,41 @@ import axios from "axios";
 import Search from "./components/Search.jsx";
 import Movies from "./components/Movies.jsx";
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      movies: [{ deway: "movies" }],
-      favorites: [{ deway: "favorites" }],
-      showFaves: false,
-    };
+const App = (props) => {
+  const [movies, setMovies] = useState([{ deway: "movies" }]);
+  const [favorites, setFavorites] = useState([{ deway: "favorites" }]);
+  const [showFaves, setShowFaves] = useState(false);
 
-    // you might have to do something important here!
-  }
+  // make an axios request to your server on the GET SEARCH endpoint
+  useEffect(() => {
+    const data = async () => await axios("/movies/search");
+    setMovies(data.results);
+  });
 
-  getMovies() {
-    // make an axios request to your server on the GET SEARCH endpoint
-  }
-
-  saveMovie() {
+  const saveMovie = () => {
     // same as above but do something diff
-  }
+  };
 
-  deleteMovie() {
+  const deleteMovie = () => {
     // same as above but do something diff
-  }
+  };
 
-  swapFavorites() {
-    //dont touch
-    this.setState({
-      showFaves: !this.state.showFaves,
-    });
-  }
+  const swapFavorites = () => {
+    setShowFaves(!showFaves);
+  };
 
-  render() {
-    return (
-      <div className="app">
-        <header className="navbar">
-          <h1>Bad Movies</h1>
-        </header>
+  return (
+    <div className="app">
+      <header className="navbar">
+        <h1>Bad Movies</h1>
+      </header>
 
-        <div className="main">
-          <Search
-            swapFavorites={this.swapFavorites}
-            showFaves={this.state.showFaves}
-          />
-          <Movies
-            movies={
-              this.state.showFaves ? this.state.favorites : this.state.movies
-            }
-            showFaves={this.state.showFaves}
-          />
-        </div>
+      <div className="main">
+        <Search swapFavorites={swapFavorites} showFaves={showFaves} />
+        <Movies movies={showFaves ? favorites : movies} showFaves={showFaves} />
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 ReactDOM.render(<App />, document.getElementById("app"));
